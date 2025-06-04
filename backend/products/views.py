@@ -48,6 +48,8 @@ from .serializers import ProductListSerializer, ProductDetailSerializer
 
 class ProductListView(generics.ListAPIView):
     serializer_class = ProductListSerializer
+    print("Initializing ProductListView")
+    print("ProductListView initialized")
     
     def get_queryset(self):
         queryset = Product.objects.filter(
@@ -59,7 +61,7 @@ class ProductListView(generics.ListAPIView):
         category = self.request.query_params.get('category')
         if category:
             queryset = queryset.filter(category__slug=category)
-        
+        print(f"Filtered queryset: {queryset.query}")
         return queryset
     
     def list(self, request, *args, **kwargs):
@@ -75,7 +77,7 @@ class ProductListView(generics.ListAPIView):
         # Add categories to response
         categories = Category.objects.filter(is_active=True).values('id', 'name', 'slug')
         response.data['categories'] = list(categories)
-        
+        print(f"Response data: {response.data}")
         # Cache for 30 minutes
         cache.set(cache_key, response.data, timeout=1800)
         
