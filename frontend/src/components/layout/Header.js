@@ -48,7 +48,7 @@ const Header = () => {
                 <span className="text-white font-bold text-xl">🍛</span>
               </div>
               <span className="font-bold text-2xl gradient-text">
-                Svadishta
+                Svadishta Flavors
               </span>
             </Link>
 
