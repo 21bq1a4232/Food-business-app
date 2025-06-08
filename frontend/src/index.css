@@ -115,3 +115,30 @@
 ::-webkit-scrollbar-thumb {
   @apply bg-gradient-to-b from-orange-400 to-red-500 rounded-full;
 }
+@keyframes seasonal-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* Choose your speed: */
+
+/* Fast pulse - 1 second */
+.seasonal-pulse-fast {
+  animation: seasonal-pulse 1s ease-in-out infinite;
+}
+
+/* Very fast pulse - 0.8 seconds */
+.seasonal-pulse-very-fast {
+  animation: seasonal-pulse 0.8s ease-in-out infinite;
+}
+
+/* Medium-fast pulse - 1.2 seconds */
+.seasonal-pulse-medium {
+  animation: seasonal-pulse 1.2s ease-in-out infinite;
+}

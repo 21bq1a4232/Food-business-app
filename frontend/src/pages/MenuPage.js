@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search, Filter } from 'lucide-react';
 import axios from 'axios';
-import ProductCard from '../components/product/ProductCard';
+import EnhancedProductCard from '../components/product/ProductCard';
 
 const MenuPage = () => {
   const [products, setProducts] = useState([]);
@@ -11,25 +11,63 @@ const MenuPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [sortBy, setSortBy] = useState('name');
 
-  const fetchProducts = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const url = selectedCategory === 'all' 
-        ? 'http://127.0.0.1:8000/api/products/'
-        : `http://127.0.0.1:8000/api/products/?category=${selectedCategory}`;
+  // const fetchProducts = useCallback(async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const url = selectedCategory === 'all' 
+  //       ? 'http://127.0.0.1:8000/api/products/'
+  //       : `http://127.0.0.1:8000/api/products/?category=${selectedCategory}`;
       
-      const response = await axios.get(url);
-      setProducts(response.data.results || []);
-      if (response.data.categories) {
+  //     const response = await axios.get(url);
+  //     setProducts(response.data.results || []);
+  //     if (response.data.categories) {
+  //       setCategories(response.data.categories);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching products:', error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // }, [selectedCategory]);
+// Updated fetchProducts function in your MenuPage component
+
+const fetchProducts = useCallback(async () => {
+  setIsLoading(true);
+  try {
+    let allProducts = [];
+    let nextUrl = selectedCategory === 'all' 
+      ? 'http://127.0.0.1:8000/api/products/'
+      : `http://127.0.0.1:8000/api/products/?category=${selectedCategory}`;
+    
+    // Fetch all pages
+    while (nextUrl) {
+      console.log('Fetching from URL:', nextUrl);
+      const response = await axios.get(nextUrl);
+      
+      // Add products from this page
+      const pageProducts = response.data.results || [];
+      allProducts = [...allProducts, ...pageProducts];
+      
+      // Check if there's a next page
+      nextUrl = response.data.next;
+      
+      // Store categories from first response
+      if (response.data.categories && allProducts.length === pageProducts.length) {
         setCategories(response.data.categories);
       }
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    } finally {
-      setIsLoading(false);
+      
+      console.log(`Loaded ${pageProducts.length} products, total: ${allProducts.length}`);
     }
-  }, [selectedCategory]);
-
+    
+    setProducts(allProducts);
+    console.log(`Final product count: ${allProducts.length}`);
+    
+  } catch (error) {
+    console.error('Error fetching products:', error);
+  } finally {
+    setIsLoading(false);
+  }
+}, [selectedCategory]);
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
@@ -52,10 +90,10 @@ const MenuPage = () => {
     });
 
   const categoryEmojis = {
-    'pickles': '🥭',
-    'sweets': '🍮',
-    'hot-foods': '🍛',
-    'dry-snacks': '🥟'
+    'pickles': '',
+    'sweets': '',
+    'hot-foods': '',
+    'dry-snacks': ''
   };
 
   return (
@@ -107,7 +145,7 @@ const MenuPage = () => {
               : 'bg-white text-gray-700 hover:bg-orange-50 border border-gray-200'
           }`}
         >
-          🍽️ All Items
+         All Items
         </button>
         {categories.map((category) => (
           <button
@@ -141,7 +179,7 @@ const MenuPage = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <EnhancedProductCard key={product.id} product={product} />
           ))}
         </div>
       )}
