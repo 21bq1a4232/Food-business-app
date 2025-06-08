@@ -11,26 +11,6 @@ const MenuPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [sortBy, setSortBy] = useState('name');
 
-  // const fetchProducts = useCallback(async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const url = selectedCategory === 'all' 
-  //       ? 'http://127.0.0.1:8000/api/products/'
-  //       : `http://127.0.0.1:8000/api/products/?category=${selectedCategory}`;
-      
-  //     const response = await axios.get(url);
-  //     setProducts(response.data.results || []);
-  //     if (response.data.categories) {
-  //       setCategories(response.data.categories);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching products:', error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // }, [selectedCategory]);
-// Updated fetchProducts function in your MenuPage component
-
 const fetchProducts = useCallback(async () => {
   setIsLoading(true);
   try {
@@ -74,20 +54,24 @@ const fetchProducts = useCallback(async () => {
 
   // Rest of the component code stays the same...
   const filteredProducts = products
-    .filter(product =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'price-low':
-          return parseFloat(a.price) - parseFloat(b.price);
-        case 'price-high':
-          return parseFloat(b.price) - parseFloat(a.price);
-        case 'name':
-        default:
-          return a.name.localeCompare(b.name);
-      }
-    });
+  .filter(product =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+  .sort((a, b) => {
+    switch (sortBy) {
+      case 'price-low':
+        const aPrice = a.weight_options?.[0]?.price || a.price || 0;
+        const bPrice = b.weight_options?.[0]?.price || b.price || 0;
+        return parseFloat(aPrice) - parseFloat(bPrice);
+      case 'price-high':
+        const aPriceHigh = a.weight_options?.[0]?.price || a.price || 0;
+        const bPriceHigh = b.weight_options?.[0]?.price || b.price || 0;
+        return parseFloat(bPriceHigh) - parseFloat(aPriceHigh);
+      case 'name':
+      default:
+        return a.name.localeCompare(b.name);
+    }
+  });
 
   const categoryEmojis = {
     'pickles': '',
