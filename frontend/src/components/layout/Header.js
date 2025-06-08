@@ -44,9 +44,9 @@ const Header = () => {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2 hover-float">
-              <div className="bg-gradient-to-r from-orange-500 to-red-500 p-2 rounded-xl shadow-lg">
+              {/* <div className="bg-gradient-to-r from-orange-500 to-red-500 p-2 rounded-xl shadow-lg">
                 <span className="text-white font-bold text-xl">🍛</span>
-              </div>
+              </div> */}
               <span className="font-bold text-2xl gradient-text">
                 Svadishta Flavors
               </span>
@@ -68,7 +68,6 @@ const Header = () => {
               </Link>
             </nav>
 
-            {/* Cart & User Actions */}
             <div className="flex items-center space-x-4">
               <Link to="/cart" className="relative p-2 text-gray-700 hover:text-orange-600 transition-colors hover-float">
                 <ShoppingCart className="h-6 w-6" />
@@ -79,8 +78,7 @@ const Header = () => {
                 )}
               </Link>
               
-              {/* User Menu */}
-              {user ? (
+              {/* {user ? (
                 <div className="relative group">
                   <button className="flex items-center space-x-2 p-2 text-gray-700 hover:text-orange-600 transition-colors">
                     <User className="h-6 w-6" />
@@ -89,7 +87,6 @@ const Header = () => {
                     </span>
                   </button>
                   
-                  {/* Dropdown Menu */}
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                     <div className="py-2">
                       <div className="px-4 py-2 border-b">
@@ -119,9 +116,8 @@ const Header = () => {
                 >
                   Sign In
                 </button>
-              )}
+              )} */}
 
-              {/* Mobile menu button */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="md:hidden p-2 text-gray-700 hover:text-orange-600 transition-colors"
@@ -131,7 +127,6 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Mobile Navigation */}
           {isMenuOpen && (
             <div className="md:hidden py-4 border-t animate-slide-up">
               <div className="flex flex-col space-y-3">
@@ -164,7 +159,6 @@ const Header = () => {
                   📞 Contact
                 </Link>
                 
-                {/* Mobile Auth */}
                 {!user && (
                   <div className="pt-2 border-t">
                     <button 

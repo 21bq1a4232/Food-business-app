@@ -9,10 +9,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="bg-gradient-to-r from-orange-500 to-red-500 p-2 rounded-xl">
-                <span className="text-white font-bold text-xl">🍛</span>
-              </div>
-              <span className="font-bold text-2xl">Svadishta</span>
+              <span className="font-bold text-2xl">Svadishta Flavors</span>
             </div>
             <p className="text-gray-400">
               Bringing authentic Indian flavors to your table with love and tradition.
@@ -39,11 +36,11 @@ const Footer = () => {
             <div className="space-y-2 text-gray-400">
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4" />
-                <span>+91 98765 43210</span>
+                <span>+91 78934 91514</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4" />
-                <span>Mumbai, Maharashtra</span>
+                <span>Nizampet, Hyderabad, Telangana</span>
               </div>
             </div>
           </div>
@@ -51,8 +48,7 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-lg mb-4">Delivery Hours</h3>
             <div className="space-y-2 text-gray-400">
-              <div>Mon-Fri: 10:00 AM - 11:00 PM</div>
-              <div>Sat-Sun: 9:00 AM - 11:30 PM</div>
+              <div>Mon-Sun: 9:00 AM - 06:30 PM</div>
             </div>
           </div>
         </div>

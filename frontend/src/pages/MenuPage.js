@@ -145,7 +145,7 @@ const fetchProducts = useCallback(async () => {
               : 'bg-white text-gray-700 hover:bg-orange-50 border border-gray-200'
           }`}
         >
-         All Items
+          All Items
         </button>
         {categories.map((category) => (
           <button

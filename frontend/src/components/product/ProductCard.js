@@ -807,6 +807,17 @@ const EnhancedProductCard = ({ product }) => {
     }
   };
 
+  const handleDecrement = () => {
+    if (!selectedWeight) return;
+    
+    if (quantity > 1) {
+      updateCartItem(product.id, quantity - 1, selectedWeight.weight);
+    } else {
+      updateCartItem(product.id, 0, selectedWeight.weight);
+      toast.success(`${product.name} (${selectedWeight.weight}) removed from cart`);
+    }
+  };
+
   const imageUrl = product.image_url || product.image;
 
   const handleImageLoad = () => {
@@ -951,6 +962,9 @@ const EnhancedProductCard = ({ product }) => {
             {!selectedWeight ? 'Select Weight' : 'Out of Stock'}
           </button>
         )} */}
+        <button className="w-full bg-gray-300 text-gray-500 font-semibold py-3 px-4 rounded-xl cursor-not-allowed">
+  Add to Cart(Soon)
+</button>
       </div>
     </div>
   );
