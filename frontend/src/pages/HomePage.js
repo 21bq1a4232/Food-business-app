@@ -26,13 +26,13 @@ const HeroSection = () => {
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
               <button
                 onClick={() => navigate('/menu')}
-                className="btn-primary text-lg px-8 py-4"
+                className="btn-primary text-lg px-6 py-4"
               >
                 Order Now 🍽️
               </button>
               <button 
                 onClick={() => navigate('/menu')}
-                className="btn-secondary text-lg px-8 py-4"
+                className="btn-secondary text-lg px-6 py-4"
               >
                 View Menu 📋
               </button>
@@ -125,7 +125,7 @@ const HomePage = () => {
         </div>
         
         <div className="text-center mt-12">
-          <Link to="/menu" className="btn-primary text-lg px-8 py-4">
+          <Link to="/menu" className="btn-primary text-lg px-6 py-4">
             View All Items 🍽️
           </Link>
         </div>
@@ -136,7 +136,7 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Why Choose Svadishta?
+              Why Choose Svadishta Flavours?
             </h2>
           </div>
           
@@ -153,12 +153,12 @@ const HomePage = () => {
             
             <div className="text-center">
               <div className="bg-gradient-to-br from-orange-400 to-red-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">⚡</span>
+                <span className="text-2xl">🧑‍🍳</span>
               </div>
-              <h3 className="font-semibold text-xl mb-2">Fast Delivery</h3>
-              <p className="text-gray-600">
-                Hot, fresh food delivered to your doorstep in 30-45 minutes or less.
-              </p>
+              <h3 className="font-semibold text-xl mb-2">Customization</h3>
+                <p className="text-gray-600">
+                Make it just the way you love it—tailored to your taste and dietary needs.
+                </p>
             </div>
             
             <div className="text-center">
@@ -167,7 +167,7 @@ const HomePage = () => {
               </div>
               <h3 className="font-semibold text-xl mb-2">Pure Ingredients</h3>
               <p className="text-gray-600">
-                We use only the finest, freshest ingredients with no artificial preservatives.
+              We handpick only the freshest, highest-quality ingredients—no artificial preservatives.
               </p>
             </div>
           </div>

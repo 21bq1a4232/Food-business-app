@@ -18,14 +18,14 @@ const Footer = () => {
           
           <div>
             <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
-            <div className="space-y-2">
-              <Link to="/menu" className="block text-gray-400 hover:text-white transition-colors">
+            <div className="space-y-2.5 text-gray-400">
+              <Link to="/menu" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                 Menu
               </Link>
-              <Link to="/about" className="block text-gray-400 hover:text-white transition-colors">
-                About Us
+              <Link to="/about" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+                About
               </Link>
-              <Link to="/contact" className="block text-gray-400 hover:text-white transition-colors">
+              <Link to="/contact" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                 Contact
               </Link>
             </div>

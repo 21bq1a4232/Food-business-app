@@ -2,76 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Minus, ShoppingCart, Image, ChevronDown } from 'lucide-react';
 import { useCart } from '../../App';
 import toast from 'react-hot-toast';
-// Add this function at the top of your component file
-
-const MinimalWeightDropdown = ({ weightOptions, selectedWeight, onSelect }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const buttonRef = useRef(null);
-  const dropdownRef = useRef(null);
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target) && 
-          buttonRef.current && !buttonRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  return (
-    <div className="relative" ref={dropdownRef}>
-      <button
-        ref={buttonRef}
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:border-orange-400 hover:bg-orange-50 transition-all duration-200 shadow-sm"
-      >
-        <span className="font-semibold">{selectedWeight?.weight || 'Select Weight'}</span>
-        <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-      </button>
-      
-      {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl z-50 min-w-[200px]">
-          <div className="py-2">
-            {weightOptions && weightOptions.length > 0 ? (
-              weightOptions.map((option, index) => (
-                <button
-                  key={option.weight}
-                  onClick={() => {
-                    onSelect(option);
-                    setIsOpen(false);
-                  }}
-                  className={`w-full text-left px-4 py-3 hover:bg-orange-50 transition-colors border-b border-gray-100 last:border-b-0 ${
-                    selectedWeight?.weight === option.weight 
-                      ? 'bg-orange-50 text-orange-600 font-semibold' 
-                      : 'text-gray-700'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">{option.weight}</div>
-                      <div className="text-xs text-gray-500">{option.display}</div>
-                    </div>
-                    <div className="text-sm font-semibold text-orange-600">
-                      ₹{parseFloat(option.price).toFixed(0)}
-                    </div>
-                  </div>
-                </button>
-              ))
-            ) : (
-              <div className="px-4 py-3 text-sm text-gray-500 text-center">
-                No weight options available
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
+import WeightDropdown from '../common/WeightDropdown';
 
 const EnhancedProductCard = ({ product }) => {
   // Set default selected weight to 1kg if available, otherwise first available option
@@ -227,7 +158,7 @@ const EnhancedProductCard = ({ product }) => {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600">Weight:</span>
-              <MinimalWeightDropdown
+              <WeightDropdown
                 weightOptions={product.weight_options}
                 selectedWeight={selectedWeight}
                 onSelect={setSelectedWeight}

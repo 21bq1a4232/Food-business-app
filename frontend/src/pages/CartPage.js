@@ -2,40 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Minus, Clock, Trash2, ShoppingBag, ArrowRight, ChevronDown } from 'lucide-react';
 import { useCart } from '../App';
-
-const WeightDropdown = ({ weightOptions, selectedWeight, onSelect, className = "" }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className={`relative ${className}`}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-1 border border-gray-200 rounded-lg hover:border-orange-300 transition-colors bg-white text-sm"
-      >
-        <span className="font-medium">{selectedWeight}</span>
-        <ChevronDown className={`h-3 w-3 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-      </button>
-      
-      {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 min-w-[120px]">
-          {weightOptions.map((option) => (
-            <button
-              key={option.weight}
-              onClick={() => {
-                onSelect(option);
-                setIsOpen(false);
-              }}
-              className="w-full text-left p-2 hover:bg-orange-50 flex items-center justify-between border-b border-gray-100 last:border-b-0 text-sm"
-            >
-              <span>{option.weight}</span>
-              <span className="text-orange-600 font-semibold">₹{option.price}</span>
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
+import WeightDropdown from '../components/common/WeightDropdown';
 
 const CartPage = () => {
   const { cartItems, cartTotal, updateCartItem, changeCartItemWeight } = useCart();
@@ -95,7 +62,7 @@ const CartPage = () => {
         </p>
         <button
           onClick={() => navigate('/menu')}
-          className="btn-primary text-lg px-8 py-4 inline-flex items-center gap-2 group"
+          className="btn-primary text-lg px-6 py-4 inline-flex items-center gap-2 group"
         >
           <ShoppingBag className="h-5 w-5" />
           Browse Menu 
@@ -152,12 +119,18 @@ const CartPage = () => {
                   </h3>
                   
                   {/* Weight Display */}
-                  <div className="flex items-center gap-2 mt-1 mb-2">
-                    <span className="text-sm text-gray-600">Weight:</span>
+                  {item.available_weights && item.available_weights.length > 0 ? (
+                    <WeightDropdown
+                      weightOptions={item.available_weights}
+                      selectedWeight={item.selected_weight}
+                      onSelect={(newWeight) => handleWeightChange(item, newWeight)}
+                      showPrice={false}
+                    />
+                  ) : (
                     <span className="text-sm font-medium text-gray-700">
-                      {item.selected_weight || 'N/A'}
+                      {item.selected_weight || item.weight || 'N/A'}
                     </span>
-                  </div>
+                  )}
                   
                   <p className="text-orange-600 font-semibold">
                     ₹{item.price} per {item.selected_weight}
