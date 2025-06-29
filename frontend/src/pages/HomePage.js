@@ -14,7 +14,7 @@ const HeroSection = () => {
             <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
               Authentic
               <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-                {" "}Indian Flavors
+                {" "}Indian Flavours
               </span>
               <br />
               Delivered Fresh

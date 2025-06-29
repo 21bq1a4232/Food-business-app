@@ -88,7 +88,7 @@ const fetchProducts = useCallback(async () => {
           Our Delicious Menu
         </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          Authentic flavors crafted with traditional recipes and premium ingredients.
+          Authentic flavours crafted with traditional recipes and premium ingredients.
         </p>
       </div>
 

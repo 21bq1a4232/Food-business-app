@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Minus, ShoppingCart, Image, ChevronDown } from 'lucide-react';
 import { useCart } from '../../App';
 import toast from 'react-hot-toast';
@@ -6,50 +6,91 @@ import toast from 'react-hot-toast';
 
 const MinimalWeightDropdown = ({ weightOptions, selectedWeight, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const buttonRef = useRef(null);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target) && 
+          buttonRef.current && !buttonRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
-    <div className="relative inline-block">
+    <div className="relative" ref={dropdownRef}>
       <button
+        ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1 px-2 py-1 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors"
+        className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:border-orange-400 hover:bg-orange-50 transition-all duration-200 shadow-sm"
       >
-        <span>{selectedWeight?.weight || 'Select'}</span>
-        <ChevronDown className={`h-3 w-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <span className="font-semibold">{selectedWeight?.weight || 'Select Weight'}</span>
+        <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
       
       {isOpen && (
-        <>
-          {/* Backdrop to close dropdown */}
-          <div 
-            className="fixed inset-0 z-10" 
-            onClick={() => setIsOpen(false)}
-          />
-          {/* Dropdown content */}
-          <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 min-w-[100px]">
-            {weightOptions.map((option) => (
-              <button
-                key={option.weight}
-                onClick={() => {
-                  onSelect(option);
-                  setIsOpen(false);
-                }}
-                className={`w-full text-left px-3 py-2 text-sm hover:bg-orange-50 border-b border-gray-100 last:border-b-0 transition-colors ${
-                  selectedWeight?.weight === option.weight ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'
-                }`}
-              >
-                {option.weight}
-              </button>
-            ))}
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl z-50 min-w-[200px]">
+          <div className="py-2">
+            {weightOptions && weightOptions.length > 0 ? (
+              weightOptions.map((option, index) => (
+                <button
+                  key={option.weight}
+                  onClick={() => {
+                    onSelect(option);
+                    setIsOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 hover:bg-orange-50 transition-colors border-b border-gray-100 last:border-b-0 ${
+                    selectedWeight?.weight === option.weight 
+                      ? 'bg-orange-50 text-orange-600 font-semibold' 
+                      : 'text-gray-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium">{option.weight}</div>
+                      <div className="text-xs text-gray-500">{option.display}</div>
+                    </div>
+                    <div className="text-sm font-semibold text-orange-600">
+                      ₹{parseFloat(option.price).toFixed(0)}
+                    </div>
+                  </div>
+                </button>
+              ))
+            ) : (
+              <div className="px-4 py-3 text-sm text-gray-500 text-center">
+                No weight options available
+              </div>
+            )}
           </div>
-        </>
+        </div>
       )}
     </div>
   );
 };
 
 const EnhancedProductCard = ({ product }) => {
-  // Set default selected weight to first available option
-  const [selectedWeight, setSelectedWeight] = useState(product.weight_options?.[0] || null);
+  // Set default selected weight to 1kg if available, otherwise first available option
+  const getDefaultWeight = (weightOptions) => {
+    if (!weightOptions || weightOptions.length === 0) return null;
+    
+    // Try to find 1kg option first
+    const oneKgOption = weightOptions.find(option => 
+      option.weight.toLowerCase().includes('1kg') || 
+      option.weight.toLowerCase().includes('1 kg') ||
+      option.weight.toLowerCase().includes('1000g') ||
+      option.weight.toLowerCase().includes('1000 g')
+    );
+    
+    // Return 1kg option if found, otherwise return first option
+    return oneKgOption || weightOptions[0];
+  };
+  
+  const [selectedWeight, setSelectedWeight] = useState(getDefaultWeight(product.weight_options));
   const { cartItems, addToCart, updateCartItem } = useCart();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -116,9 +157,9 @@ const EnhancedProductCard = ({ product }) => {
   }
 
   return (
-    <div className="card group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-white rounded-2xl overflow-hidden">
+    <div className="card group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-white rounded-2xl">
       {/* Enhanced Image Container */}
-      <div className="relative h-56 overflow-hidden bg-gradient-to-br from-orange-50 to-red-50">
+      <div className="relative h-56 overflow-hidden bg-gradient-to-br from-orange-50 to-red-50 rounded-t-2xl">
         {/* Seasonal Badge */}
         {product.is_seasonal && (
       <div className="absolute top-3 right-3 bg-emerald-500 text-white px-2 py-1 rounded-full text-xs font-semibold z-10 seasonal-pulse-fast">

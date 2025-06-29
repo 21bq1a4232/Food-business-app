@@ -152,6 +152,7 @@ INSTALLED_APPS = [
     'orders',
     'users',
     'payments',
+    'health',
 ]
 
 MIDDLEWARE = [

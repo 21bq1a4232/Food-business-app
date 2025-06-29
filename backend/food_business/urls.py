@@ -20,6 +20,7 @@ def api_root(request):
 urlpatterns = [
     path('', api_root, name='api-root'),  # ← Add root URL
     path('admin/', admin.site.urls),
+    path('health/', include('health.urls')),  # Health check endpoints
     path('api/products/', include('products.urls')),
     path('api/cart/', include('cart.urls')),
     path('api/auth/', include('users.urls')),

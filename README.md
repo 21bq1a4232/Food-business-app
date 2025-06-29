@@ -1,322 +1,348 @@
-Perfect! Let me update the README.md to include the `start-dev.sh` convenience script. Here's the updated section to add:
+# Food Business Application
 
-## **📝 UPDATED README.md SECTION**
+A full-stack food business application built with Django (backend) and React (frontend), featuring order management, payment processing, and user authentication.
 
-Add this section after the "Quick Start" section in your README.md:
-
-```markdown
-## 🚀 Quick Start
+## 🚀 Quick Start with Docker
 
 ### Prerequisites
-- Python 3.12+
-- Node.js 18+
-- Redis (for development)
-- PostgreSQL (for production)
 
-### 1️⃣ **Clone Repository**
-```bash
-git clone https://github.com/YOUR_USERNAME/food-business-app.git
-cd food-business-app
-```
+- Docker and Docker Compose installed
+- At least 4GB of available RAM
+- Ports 3000, 8000, 5432, and 6379 available
 
-### 2️⃣ **One-Command Development Setup** ⚡
-```bash
-# Make the script executable (first time only)
-chmod +x start-dev.sh
+### Development Deployment
 
-# Start everything with one command
-./start-dev.sh
-```
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd food-business-app
+   ```
 
-**This will automatically:**
-- 🔴 Start Redis server
-- 🐍 Start Django backend on http://127.0.0.1:8000
-- ⚛️ Start React frontend on http://localhost:3000
-- 📊 Setup initial demo data
+2. **Set up environment variables**
+   ```bash
+   cp env.example .env
+   # Edit .env with your configuration
+   ```
 
-**To stop everything:** Press `Ctrl+C`
+3. **Deploy the application**
+   ```bash
+   ./deploy.sh
+   ```
 
-### 3️⃣ **Manual Setup (Alternative)**
+4. **Access the application**
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:8000
+   - Admin Panel: http://localhost:8000/admin/
+   - Health Check: http://localhost:8000/health/
 
-If you prefer to start services individually:
+### Production Deployment
 
-#### **Backend Setup (Django)**
-```bash
-cd backend
+1. **Configure production environment**
+   ```bash
+   cp env.example .env
+   # Edit .env with production settings
+   ```
 
-# Create virtual environment (first time only)
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+2. **Deploy in production mode**
+   ```bash
+   ./deploy.sh production
+   ```
 
-# Install dependencies (first time only)
-pip install -r requirements.txt
+## 📁 Project Structure
 
-# Environment setup (first time only)
-cp .env.example .env
-# Edit .env with your settings
-
-# Database setup (first time only)
-python manage.py migrate
-python manage.py setup_initial_data
-python manage.py createsuperuser
-
-# Start Redis (separate terminal)
-redis-server
-
-# Start Django server
-python manage.py runserver
-```
-
-#### **Frontend Setup (React)**
-```bash
-cd frontend
-
-# Install dependencies (first time only)
-npm install
-
-# Start development server
-npm start
-```
-
-### 4️⃣ **Access Application**
-- **Frontend:** http://localhost:3000
-- **Backend API:** http://127.0.0.1:8000/api/
-- **Admin Panel:** http://127.0.0.1:8000/admin/
-
-## ⚡ Development Scripts
-
-### 🎯 **Recommended: One-Command Start**
-```bash
-# Start everything (Redis + Django + React)
-./start-dev.sh
-```
-
-### 🔧 **Individual Commands**
-```bash
-# Backend only
-cd backend && source venv/bin/activate && python manage.py runserver
-
-# Frontend only  
-cd frontend && npm start
-
-# Redis only
-redis-server
-```
-
-### 📦 **Package Management**
-```bash
-# Backend dependencies
-cd backend && pip install -r requirements.txt
-
-# Frontend dependencies
-cd frontend && npm install
-
-# Update dependencies
-cd frontend && npm update
-```
-
-### 🧪 **Testing**
-```bash
-# Test backend
-cd backend && python manage.py test
-
-# Test frontend
-cd frontend && npm test
-
-# Test everything
-./start-dev.sh && npm test
-```
-
-## 🛠️ Development
-
-### 📁 **Project Structure**
 ```
 food-business-app/
-├── start-dev.sh            # 🚀 One-command development start
 ├── backend/                 # Django backend
-│   ├── food_business/       # Main Django project
-│   ├── cart/               # Shopping cart (Redis)
-│   ├── products/           # Product management
-│   ├── orders/             # Order processing
-│   ├── users/              # User management
-│   ├── payments/           # Payment processing
-│   ├── manage.py           # Django management
+│   ├── Dockerfile          # Backend container configuration
 │   ├── requirements.txt    # Python dependencies
-│   └── venv/              # Virtual environment
-├── frontend/               # React frontend
-│   ├── src/
-│   │   ├── components/     # Reusable components
-│   │   ├── pages/         # Page components
-│   │   └── assets/        # Static assets
-│   ├── package.json       # Node dependencies
-│   └── tailwind.config.js # Tailwind configuration
+│   ├── manage.py          # Django management script
+│   ├── food_business/     # Django project settings
+│   ├── products/          # Products app
+│   ├── cart/              # Shopping cart app
+│   ├── orders/            # Order management app
+│   ├── users/             # User management app
+│   ├── payments/          # Payment processing app
+│   └── health/            # Health check endpoints
+├── frontend/              # React frontend
+│   ├── Dockerfile         # Frontend container configuration
+│   ├── package.json       # Node.js dependencies
+│   ├── nginx.conf         # Nginx configuration for frontend
+│   └── src/               # React source code
+├── nginx/                 # Nginx reverse proxy configuration
+├── docker-compose.yml     # Development services orchestration
+├── docker-compose.prod.yml # Production services orchestration
+├── deploy.sh              # Deployment automation script
+├── env.example            # Environment variables template
 └── README.md              # This file
 ```
 
-### 🎬 **Development Workflow**
+## 🐳 Docker Services
 
-#### **🚀 Quick Start (Recommended)**
-```bash
-# One command to rule them all
-./start-dev.sh
+### Development Services
+- **Frontend**: React app served by Nginx (port 3000)
+- **Backend**: Django app with Gunicorn (port 8000)
+- **Database**: PostgreSQL 15 (port 5432)
+- **Cache**: Redis 7 (port 6379)
+- **Celery Worker**: Background task processing
+- **Celery Beat**: Scheduled task processing
 
-# Open in your browser:
-# Frontend: http://localhost:3000
-# Admin: http://127.0.0.1:8000/admin/
-```
+### Production Services
+- **Nginx**: Reverse proxy with SSL termination (ports 80, 443)
+- **Frontend**: Optimized React build
+- **Backend**: Production-optimized Django with multiple workers
+- **Database**: PostgreSQL with persistent storage
+- **Cache**: Redis with authentication
+- **Celery**: Background task processing with resource limits
 
-#### **🔧 Manual Start (Alternative)**
-```bash
-# Terminal 1: Redis
-redis-server
+## 🔧 Configuration
 
-# Terminal 2: Django Backend
-cd backend
-source venv/bin/activate
-python manage.py runserver
+### Environment Variables
 
-# Terminal 3: React Frontend
-cd frontend
-npm start
-```
-
-#### **🛑 Stopping Development**
-```bash
-# If using start-dev.sh
-Ctrl+C  # Stops all services
-
-# If using manual start
-Ctrl+C in each terminal
-```
-```
-
-## **🔧 UPDATE THE start-dev.sh SCRIPT**
-
-Also, let's improve the `start-dev.sh` script to be more robust:
+Create a `.env` file based on `env.example`:
 
 ```bash
-cat > start-dev.sh << 'EOF'
-#!/bin/bash
+# Django Settings
+DEBUG=False
+SECRET_KEY=your-super-secret-key
+ALLOWED_HOSTS=localhost,127.0.0.1,your-domain.com
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+# Database Settings
+DB_NAME=food_business
+DB_USER=postgres
+DB_PASSWORD=secure-password
+DB_HOST=db
+DB_PORT=5432
 
-echo -e "${BLUE}🍛 Starting Svadishta Food Business Development Environment...${NC}"
-echo "================================================"
+# Redis Settings
+REDIS_URL=redis://redis:6379/1
+REDIS_PASSWORD=secure-redis-password
 
-# Function to cleanup on exit
-cleanup() {
-    echo -e "\n${YELLOW}🛑 Stopping all services...${NC}"
-    if [ ! -z "$DJANGO_PID" ]; then
-        kill $DJANGO_PID 2>/dev/null
-    fi
-    if [ ! -z "$REACT_PID" ]; then
-        kill $REACT_PID 2>/dev/null
-    fi
-    # Stop Redis if we started it
-    redis-cli shutdown 2>/dev/null
-    echo -e "${GREEN}✅ All services stopped. Goodbye!${NC}"
-    exit 0
-}
+# Payment Gateway Settings
+RAZORPAY_KEY_ID=your-razorpay-key-id
+RAZORPAY_KEY_SECRET=your-razorpay-secret-key
 
-# Set trap to cleanup on Ctrl+C
-trap cleanup SIGINT
-
-# Check if Redis is already running
-if ! redis-cli ping > /dev/null 2>&1; then
-    echo -e "${YELLOW}📡 Starting Redis server...${NC}"
-    redis-server --daemonize yes
-    sleep 2
-    if redis-cli ping > /dev/null 2>&1; then
-        echo -e "${GREEN}✅ Redis started successfully${NC}"
-    else
-        echo -e "${RED}❌ Failed to start Redis${NC}"
-        exit 1
-    fi
-else
-    echo -e "${GREEN}✅ Redis already running${NC}"
-fi
-
-# Start Django backend
-echo -e "${YELLOW}🐍 Starting Django backend...${NC}"
-cd backend
-
-# Check if virtual environment exists
-if [ ! -d "venv" ]; then
-    echo -e "${RED}❌ Virtual environment not found. Please run setup first.${NC}"
-    exit 1
-fi
-
-# Activate virtual environment and start Django
-source venv/bin/activate
-python manage.py runserver > /dev/null 2>&1 &
-DJANGO_PID=$!
-
-# Wait a moment for Django to start
-sleep 3
-
-# Check if Django is running
-if curl -s http://127.0.0.1:8000 > /dev/null; then
-    echo -e "${GREEN}✅ Django backend started successfully${NC}"
-else
-    echo -e "${RED}❌ Failed to start Django backend${NC}"
-    cleanup
-fi
-
-cd ..
-
-# Start React frontend
-echo -e "${YELLOW}⚛️ Starting React frontend...${NC}"
-cd frontend
-
-# Check if node_modules exists
-if [ ! -d "node_modules" ]; then
-    echo -e "${YELLOW}📦 Installing frontend dependencies...${NC}"
-    npm install
-fi
-
-# Start React
-npm start > /dev/null 2>&1 &
-REACT_PID=$!
-
-cd ..
-
-# Wait a moment for React to start
-sleep 5
-
-echo ""
-echo -e "${GREEN}🎉 Development environment started successfully!${NC}"
-echo "================================================"
-echo -e "${BLUE}📱 Frontend:${NC} http://localhost:3000"
-echo -e "${BLUE}🔧 Backend API:${NC} http://127.0.0.1:8000/api/"
-echo -e "${BLUE}⚙️ Admin Panel:${NC} http://127.0.0.1:8000/admin/"
-echo -e "${BLUE}🔴 Redis:${NC} Running on port 6379"
-echo ""
-echo -e "${YELLOW}Demo Credentials:${NC}"
-echo -e "  Admin: admin / admin123"
-echo -e "  Customer: rahul_sharma / demo123"
-echo ""
-echo -e "${GREEN}Press Ctrl+C to stop all services${NC}"
-echo "================================================"
-
-# Wait for user to press Ctrl+C
-while true; do
-    sleep 1
-done
-EOF
-
-chmod +x start-dev.sh
+# Email Settings
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
+DEFAULT_FROM_EMAIL=your-email@gmail.com
 ```
 
-## **🧪 TEST THE UPDATED SCRIPT**
+### SSL Configuration (Production)
+
+1. **Generate SSL certificates**
+   ```bash
+   mkdir -p nginx/ssl
+   # Add your SSL certificates to nginx/ssl/
+   ```
+
+2. **Update nginx configuration**
+   - Uncomment HTTPS server block in `nginx/nginx.conf`
+   - Update server_name with your domain
+
+## 🚀 Deployment Commands
+
+### Using the Deployment Script
 
 ```bash
-# Test the new script
-./start-dev.sh
+# Development deployment
+./deploy.sh
+
+# Production deployment
+./deploy.sh production
+
+# Stop services
+./deploy.sh stop
+
+# View logs
+./deploy.sh logs
+
+# Check status
+./deploy.sh status
+
+# Clean up Docker resources
+./deploy.sh cleanup
+
+# Show help
+./deploy.sh help
 ```
 
-You should see beautiful colored output showing the startup process!
+### Manual Docker Commands
+
+```bash
+# Development
+docker-compose up -d --build
+
+# Production
+docker-compose -f docker-compose.prod.yml --env-file .env up -d --build
+
+# Stop services
+docker-compose down
+
+# View logs
+docker-compose logs -f
+
+# Access backend shell
+docker-compose exec backend python manage.py shell
+
+# Run migrations
+docker-compose exec backend python manage.py migrate
+
+# Create superuser
+docker-compose exec backend python manage.py createsuperuser
+```
+
+## 📊 Monitoring & Health Checks
+
+### Health Check Endpoints
+- **Application Health**: `http://localhost:8000/health/`
+- **Database**: Automatic health checks in Docker Compose
+- **Redis**: Automatic health checks in Docker Compose
+
+### Logs
+```bash
+# All services
+./deploy.sh logs
+
+# Specific service
+docker-compose logs -f backend
+docker-compose logs -f frontend
+docker-compose logs -f db
+```
+
+### Performance Monitoring
+- **Resource Usage**: `docker stats`
+- **Container Status**: `docker-compose ps`
+- **Service Health**: Health check endpoints
+
+## 🔒 Security Features
+
+### Production Security
+- Non-root containers
+- Resource limits
+- Health checks
+- Rate limiting (Nginx)
+- Security headers
+- SSL/TLS encryption
+- Environment variable isolation
+
+### Database Security
+- PostgreSQL with authentication
+- Persistent volume storage
+- Network isolation
+- Regular backups (recommended)
+
+### Application Security
+- Django security middleware
+- CORS configuration
+- JWT authentication
+- Input validation
+- SQL injection protection
+
+## 🛠️ Development
+
+### Adding New Features
+1. **Backend**: Add Django apps in `backend/`
+2. **Frontend**: Add React components in `frontend/src/`
+3. **Database**: Create and run migrations
+4. **Testing**: Add tests to respective apps
+
+### Database Migrations
+```bash
+# Create migration
+docker-compose exec backend python manage.py makemigrations
+
+# Apply migration
+docker-compose exec backend python manage.py migrate
+```
+
+### Static Files
+```bash
+# Collect static files
+docker-compose exec backend python manage.py collectstatic
+```
+
+## 📈 Scaling
+
+### Horizontal Scaling
+```bash
+# Scale backend workers
+docker-compose up -d --scale backend=3
+
+# Scale Celery workers
+docker-compose up -d --scale celery_worker=2
+```
+
+### Resource Optimization
+- Adjust memory limits in docker-compose files
+- Optimize Gunicorn workers based on CPU cores
+- Configure Redis memory limits
+- Use CDN for static files in production
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **Port conflicts**
+   ```bash
+   # Check port usage
+   lsof -i :3000
+   lsof -i :8000
+   ```
+
+2. **Database connection issues**
+   ```bash
+   # Check database logs
+   docker-compose logs db
+   ```
+
+3. **Memory issues**
+   ```bash
+   # Check resource usage
+   docker stats
+   ```
+
+4. **Permission issues**
+   ```bash
+   # Fix file permissions
+   sudo chown -R $USER:$USER .
+   ```
+
+### Debug Mode
+```bash
+# Enable debug mode
+echo "DEBUG=True" >> .env
+docker-compose restart backend
+```
+
+## 📚 Additional Resources
+
+- [Django Documentation](https://docs.djangoproject.com/)
+- [React Documentation](https://reactjs.org/docs/)
+- [Docker Documentation](https://docs.docker.com/)
+- [Nginx Documentation](https://nginx.org/en/docs/)
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+- [Redis Documentation](https://redis.io/documentation)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🆘 Support
+
+For support and questions:
+- Create an issue in the repository
+- Check the troubleshooting section
+- Review the logs for error messages
+- Ensure all prerequisites are met

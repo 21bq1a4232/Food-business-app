@@ -1,93 +1,107 @@
-import json
-from django.core.cache import cache
+from django.db import transaction
 from products.models import Product
+from .models import Cart, CartItem
 from decimal import Decimal
 
 class CartService:
     def __init__(self, user_id=None, session_key=None):
         self.user_id = user_id
         self.session_key = session_key
-        self.cache_key = f"cart:{user_id or session_key}"
+        self.cart = self._get_or_create_cart()
+    
+    def _get_or_create_cart(self):
+        """Get existing cart or create new one"""
+        if self.user_id:
+            cart, created = Cart.objects.get_or_create(user_id=self.user_id)
+        else:
+            cart, created = Cart.objects.get_or_create(session_key=self.session_key)
+        return cart
     
     def get_cart(self):
-        """Get cart from Redis"""
-        cart_data = cache.get(self.cache_key, {})
-        if not cart_data:
-            return self._empty_cart()
-        
-        # Get product details for cart items
-        product_ids = list(cart_data.get('items', {}).keys())
-        products = Product.objects.filter(id__in=product_ids).values(
-            'id', 'name', 'price', 'image', 'weight', 'stock_quantity'
-        )
-        
-        items = []
-        subtotal = Decimal('0')
-        
-        for product in products:
-            product_id = str(product['id'])
-            if product_id in cart_data['items']:
-                quantity = cart_data['items'][product_id]
-                
-                # Check stock
-                if quantity > product['stock_quantity']:
-                    quantity = product['stock_quantity']
-                    cart_data['items'][product_id] = quantity
-                
-                item_total = Decimal(str(product['price'])) * quantity
-                subtotal += item_total
-                
-                items.append({
-                    'product_id': product['id'],
-                    'name': product['name'],
-                    'price': product['price'],
-                    'image': product['image'],
-                    'weight': product['weight'],
-                    'quantity': quantity,
-                    'subtotal': item_total
-                })
-        
-        delivery_fee = Decimal('40.00') if subtotal > 0 else Decimal('0')
-        total_amount = subtotal + delivery_fee
-        
-        cart_response = {
-            'items': items,
-            'total_items': sum(item['quantity'] for item in items),
-            'subtotal': subtotal,
-            'delivery_fee': delivery_fee,
-            'total_amount': total_amount
-        }
-        
-        # Update cache with cleaned data
-        cache.set(self.cache_key, cart_data, timeout=3600)  # 1 hour
-        
-        return cart_response
+        """Get cart with all items and totals"""
+        # Return the cart model instance directly for serialization
+        return self.cart
     
-    def update_cart(self, items):
-        """Update cart with new items"""
-        cart_data = cache.get(self.cache_key, {'items': {}})
-        
-        for item in items:
-            product_id = str(item['product_id'])
-            quantity = item['quantity']
+    @transaction.atomic
+    def add_item(self, product_id, selected_weight, quantity=1):
+        """Add item to cart or update quantity"""
+        try:
+            product = Product.objects.get(id=product_id)
             
-            if quantity > 0:
-                cart_data['items'][product_id] = quantity
-            elif product_id in cart_data['items']:
-                del cart_data['items'][product_id]
-        
-        cache.set(self.cache_key, cart_data, timeout=3600)
-        return self.get_cart()
+            # Calculate price for selected weight
+            price = product.get_price_for_weight(selected_weight)
+            
+            # Check if item already exists in cart
+            cart_item, created = CartItem.objects.get_or_create(
+                cart=self.cart,
+                product=product,
+                selected_weight=selected_weight,
+                defaults={'quantity': quantity, 'price': price}
+            )
+            
+            if not created:
+                # Update existing item
+                cart_item.quantity += quantity
+                cart_item.save()
+            
+            return self.cart
+            
+        except Product.DoesNotExist:
+            raise ValueError(f"Product with id {product_id} does not exist")
     
+    @transaction.atomic
+    def update_item(self, product_id, selected_weight, quantity):
+        """Update item quantity in cart"""
+        try:
+            cart_item = CartItem.objects.get(
+                cart=self.cart,
+                product_id=product_id,
+                selected_weight=selected_weight
+            )
+            
+            if quantity <= 0:
+                cart_item.delete()
+            else:
+                cart_item.quantity = quantity
+                cart_item.save()
+            
+            return self.cart
+            
+        except CartItem.DoesNotExist:
+            raise ValueError("Item not found in cart")
+    
+    @transaction.atomic
+    def remove_item(self, product_id, selected_weight):
+        """Remove item from cart"""
+        try:
+            cart_item = CartItem.objects.get(
+                cart=self.cart,
+                product_id=product_id,
+                selected_weight=selected_weight
+            )
+            cart_item.delete()
+            return self.cart
+            
+        except CartItem.DoesNotExist:
+            raise ValueError("Item not found in cart")
+    
+    @transaction.atomic
     def clear_cart(self):
-        """Clear cart completely"""
-        cache.delete(self.cache_key)
+        """Clear all items from cart"""
+        self.cart.items.all().delete()
+        return self.cart
     
-    def _empty_cart(self):
-        return {
-            'items': [],
-            'total_items': 0,
-            'subtotal': Decimal('0'),
-            'delivery_fee': Decimal('0'),
-            'total_amount': Decimal('0')
-        }
+    def merge_carts(self, session_cart):
+        """Merge session cart with user cart after login"""
+        if not self.user_id or not session_cart:
+            return
+        
+        for item in session_cart.items.all():
+            self.add_item(
+                product_id=item.product.id,
+                selected_weight=item.selected_weight,
+                quantity=item.quantity
+            )
+        
+        # Delete session cart after merging
+        session_cart.delete()
