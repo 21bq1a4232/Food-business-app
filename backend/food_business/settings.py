@@ -272,6 +272,14 @@ CORS_ALLOWED_ORIGINS = [
 RAZORPAY_KEY_ID = config('RAZORPAY_KEY_ID', default='')
 RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET', default='')
 
+PAYTM_ENVIRONMENT = 'STAGING'  # Always STAGING for testing
+PAYTM_MERCHANT_ID = 'DIY12386817555501617'  # Public test merchant ID
+PAYTM_MERCHANT_KEY = 'bKMfNxPPf_QdZppa'     # Public test merchant key
+PAYTM_WEBSITE = 'WEBSTAGING'                # For test environment
+PAYTM_INDUSTRY_TYPE = 'Retail'
+PAYTM_CALLBACK_URL = 'http://localhost:8000/api/payments/paytm/callback/'
+
+
 # Email Configuration (for production)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Development
-DEFAULT_FROM_EMAIL = 'noreply@yourfoodbusiness.com'
+DEFAULT_FROM_EMAIL = 'svadishtaflavours@gmail.com'

@@ -334,7 +334,7 @@ class Command(BaseCommand):
                         product.save()
                         self.stdout.write(f'↻ Updated product: {product.name} (Category: {product.category.name})')
                         migrated_count += 1
-                else:
+                else:  
                     # Dry run - just show what would be created
                     category_name = {1: 'Pickles', 2: 'Sweets', 3: 'Snacks', 4: 'Spice Powders'}.get(category_id, 'Unknown')
                     self.stdout.write(f'Would create/update: {name} (Category: {category_name}, Price: ₹{base_price}, Stock: {stock_quantity})')

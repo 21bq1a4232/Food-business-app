@@ -43,7 +43,7 @@ const Header = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2 hover-float">
+            <Link to="/" className="flex items-center space-x-2 hover-float focus:outline-none">
               {/* <div className="bg-gradient-to-r from-orange-500 to-red-500 p-2 rounded-xl shadow-lg">
                 <span className="text-white font-bold text-xl">🍛</span>
               </div> */}
@@ -54,22 +54,37 @@ const Header = () => {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
+              <Link 
+                to="/" 
+                className="text-gray-700 hover:text-orange-600 font-medium transition-colors focus:outline-none focus:text-orange-600"
+              >
                 Home
               </Link>
-              <Link to="/menu" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
+              <Link 
+                to="/menu" 
+                className="text-gray-700 hover:text-orange-600 font-medium transition-colors focus:outline-none focus:text-orange-600"
+              >
                 Menu
               </Link>
-              <Link to="/about" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
+              <Link 
+                to="/about" 
+                className="text-gray-700 hover:text-orange-600 font-medium transition-colors focus:outline-none focus:text-orange-600"
+              >
                 About
               </Link>
-              <Link to="/contact" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
+              <Link 
+                to="/contact" 
+                className="text-gray-700 hover:text-orange-600 font-medium transition-colors focus:outline-none focus:text-orange-600"
+              >
                 Contact
               </Link>
             </nav>
 
             <div className="flex items-center space-x-4">
-              <Link to="/cart" className="relative p-2 text-gray-700 hover:text-orange-600 transition-colors hover-float">
+              <Link 
+                to="/cart" 
+                className="relative p-2 text-gray-700 hover:text-orange-600 transition-colors hover-float focus:outline-none focus:text-orange-600"
+              >
                 <ShoppingCart className="h-6 w-6" />
                 {itemCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-bounce-gentle font-semibold">
@@ -78,9 +93,9 @@ const Header = () => {
                 )}
               </Link>
               
-              {/* {user ? (
+              {user ? (
                 <div className="relative group">
-                  <button className="flex items-center space-x-2 p-2 text-gray-700 hover:text-orange-600 transition-colors">
+                  <button className="flex items-center space-x-2 p-2 text-gray-700 hover:text-orange-600 transition-colors focus:outline-none focus:text-orange-600">
                     <User className="h-6 w-6" />
                     <span className="hidden md:block text-sm font-medium">
                       {user.first_name}
@@ -93,15 +108,21 @@ const Header = () => {
                         <p className="text-sm font-medium text-gray-900">{user.first_name} {user.last_name}</p>
                         <p className="text-xs text-gray-500">{user.email}</p>
                       </div>
-                      <Link to="/orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50">
+                      <Link 
+                        to="/orders" 
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 focus:outline-none focus:bg-orange-50"
+                      >
                         My Orders
                       </Link>
-                      <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50">
+                      <Link 
+                        to="/profile" 
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 focus:outline-none focus:bg-orange-50"
+                      >
                         Profile
                       </Link>
                       <button 
                         onClick={handleLogout}
-                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 focus:outline-none focus:bg-red-50 flex items-center gap-2"
                       >
                         <LogOut className="h-4 w-4" />
                         Logout
@@ -112,15 +133,15 @@ const Header = () => {
               ) : (
                 <button 
                   onClick={() => setIsLoginOpen(true)}
-                  className="btn-secondary px-4 py-2 text-sm"
+                  className="btn-secondary px-4 py-2 text-sm focus:outline-none"
                 >
                   Sign In
                 </button>
-              )} */}
+              )}
 
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="md:hidden p-2 text-gray-700 hover:text-orange-600 transition-colors"
+                className="md:hidden p-2 text-gray-700 hover:text-orange-600 transition-colors focus:outline-none focus:text-orange-600"
               >
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
@@ -132,28 +153,28 @@ const Header = () => {
               <div className="flex flex-col space-y-3">
                 <Link 
                   to="/" 
-                  className="text-gray-700 hover:text-orange-600 font-medium py-2 px-4 rounded-lg hover:bg-orange-50 transition-colors"
+                  className="text-gray-700 hover:text-orange-600 font-medium py-2 px-4 rounded-lg hover:bg-orange-50 transition-colors focus:outline-none focus:bg-orange-50"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   🏠 Home
                 </Link>
                 <Link 
                   to="/menu" 
-                  className="text-gray-700 hover:text-orange-600 font-medium py-2 px-4 rounded-lg hover:bg-orange-50 transition-colors"
+                  className="text-gray-700 hover:text-orange-600 font-medium py-2 px-4 rounded-lg hover:bg-orange-50 transition-colors focus:outline-none focus:bg-orange-50"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   🍽️ Menu
                 </Link>
                 <Link 
                   to="/about" 
-                  className="text-gray-700 hover:text-orange-600 font-medium py-2 px-4 rounded-lg hover:bg-orange-50 transition-colors"
+                  className="text-gray-700 hover:text-orange-600 font-medium py-2 px-4 rounded-lg hover:bg-orange-50 transition-colors focus:outline-none focus:bg-orange-50"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   ℹ️ About
                 </Link>
                 <Link 
                   to="/contact" 
-                  className="text-gray-700 hover:text-orange-600 font-medium py-2 px-4 rounded-lg hover:bg-orange-50 transition-colors"
+                  className="text-gray-700 hover:text-orange-600 font-medium py-2 px-4 rounded-lg hover:bg-orange-50 transition-colors focus:outline-none focus:bg-orange-50"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   📞 Contact
@@ -166,7 +187,7 @@ const Header = () => {
                         setIsLoginOpen(true);
                         setIsMenuOpen(false);
                       }}
-                      className="w-full text-left py-2 px-4 text-orange-600 font-medium"
+                      className="w-full text-left py-2 px-4 text-orange-600 font-medium focus:outline-none"
                     >
                       👤 Sign In
                     </button>

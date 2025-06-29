@@ -16,8 +16,19 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  *:focus {
+  /* Updated focus styles - exclude links from default focus ring */
+  *:focus:not(a):not(button) {
     @apply outline-none ring-2 ring-orange-500 ring-opacity-50;
+  }
+
+  /* Specific focus styles for links - no ring, just color change */
+  a:focus {
+    @apply outline-none;
+  }
+
+  /* Specific focus styles for buttons if needed */
+  button:focus {
+    @apply outline-none;
   }
 }
 
@@ -115,6 +126,7 @@
 ::-webkit-scrollbar-thumb {
   @apply bg-gradient-to-b from-orange-400 to-red-500 rounded-full;
 }
+
 @keyframes seasonal-pulse {
   0%, 100% {
     opacity: 1;
